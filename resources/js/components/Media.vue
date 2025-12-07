@@ -1981,51 +1981,48 @@ export default {
         return
       }
       
-      // Пытаемся найти роут по имени или по пути
-      // Для child routes нужно проверять вложенные роуты
-      const findRouteByName = (routes, name) => {
-        for (const route of routes) {
-          if (route.name === name) {
-            return route
-          }
-          if (route.children && route.children.length > 0) {
-            const found = findRouteByName(route.children, name)
-            if (found) return found
-          }
-        }
-        return null
+      // Упрощенный подход: сначала пробуем router.push, если не работает - используем window.location
+      // Это гарантирует, что навигация всегда сработает
+      const navigateToEdit = () => {
+        // Пробуем навигацию по имени роута
+        router.push({ name: 'admin.media.edit', params: { id: String(file.id) } })
+          .then(() => {
+            // Успешная навигация
+            if (import.meta.env.DEV) {
+              console.log('[Media] Успешная навигация к роуту редактирования')
+            }
+          })
+          .catch(err => {
+            // Если навигация по имени не сработала, пробуем прямой путь
+            if (import.meta.env.DEV) {
+              console.warn('[Media] Навигация по имени не сработала, пробуем прямой путь:', err)
+            }
+            
+            router.push(`/admin/media/${file.id}/edit`)
+              .then(() => {
+                if (import.meta.env.DEV) {
+                  console.log('[Media] Успешная навигация по прямому пути')
+                }
+              })
+              .catch(err2 => {
+                // Если и прямой путь не работает, используем window.location
+                if (import.meta.env.DEV) {
+                  console.warn('[Media] Навигация по прямому пути не сработала, используем window.location:', err2)
+                }
+                window.location.href = `/admin/media/${file.id}/edit`
+              })
+          })
       }
       
-      try {
-        // Проверяем наличие роута по имени
-        const allRoutes = router.getRoutes()
-        const editRoute = findRouteByName(allRoutes, 'admin.media.edit')
-        
-        if (editRoute) {
-          // Роут найден, используем навигацию по имени
-          router.push({ name: 'admin.media.edit', params: { id: String(file.id) } }).catch(err => {
-            console.warn('[Media] Ошибка при навигации по имени, пробуем прямой путь:', err)
-            // Пробуем прямой путь
-            router.push(`/admin/media/${file.id}/edit`).catch(() => {
-              // Если не работает, используем window.location
-              window.location.href = `/admin/media/${file.id}/edit`
-            })
-          })
-        } else {
-          // Роут не найден, используем прямой путь
-          console.warn('[Media] Роут admin.media.edit не найден в router.getRoutes(), используем прямой путь')
-          // Пробуем прямой путь сразу
-          router.push(`/admin/media/${file.id}/edit`).catch(err => {
-            console.error('[Media] Ошибка при навигации по прямому пути:', err)
-            // Последний fallback - window.location
-            window.location.href = `/admin/media/${file.id}/edit`
-          })
-        }
-      } catch (error) {
-        console.error('[Media] Критическая ошибка при навигации:', error)
-        // Fallback: используем window.location напрямую
+      // Проверяем, что роутер доступен
+      if (!router) {
+        console.error('[Media] Роутер недоступен, используем window.location')
         window.location.href = `/admin/media/${file.id}/edit`
+        return
       }
+      
+      // Выполняем навигацию
+      navigateToEdit()
     }
 
 
