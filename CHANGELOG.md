@@ -5,6 +5,11 @@
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.0.0/),
 и этот проект придерживается [Semantic Versioning](https://semver.org/lang/ru/).
 
+## [1.2.2] - 2025-12-07
+
+### Добавлено
+- ✨ Добавлены системные иконки папок (folder.png, basket.png, video.png, document.png, music.png, no-image.png) для публикации
+
 ## [1.2.1] - 2025-12-07
 
 ### Исправлено
