@@ -1981,39 +1981,50 @@ export default {
         return
       }
       
-      // Проверяем наличие роута по имени, если не найден - используем прямой путь
+      // Пытаемся найти роут по имени или по пути
+      // Для child routes нужно проверять вложенные роуты
+      const findRouteByName = (routes, name) => {
+        for (const route of routes) {
+          if (route.name === name) {
+            return route
+          }
+          if (route.children && route.children.length > 0) {
+            const found = findRouteByName(route.children, name)
+            if (found) return found
+          }
+        }
+        return null
+      }
+      
       try {
-        // Сначала пытаемся найти роут по имени
-        const routes = router.getRoutes()
-        const editRoute = routes.find(r => r.name === 'admin.media.edit')
+        // Проверяем наличие роута по имени
+        const allRoutes = router.getRoutes()
+        const editRoute = findRouteByName(allRoutes, 'admin.media.edit')
         
         if (editRoute) {
           // Роут найден, используем навигацию по имени
-          router.push({ name: 'admin.media.edit', params: { id: file.id } }).catch(err => {
-            // Если ошибка при навигации по имени, используем прямой путь
-            console.warn('[Media] Роут по имени не сработал, используем прямой путь:', err)
+          router.push({ name: 'admin.media.edit', params: { id: String(file.id) } }).catch(err => {
+            console.warn('[Media] Ошибка при навигации по имени, пробуем прямой путь:', err)
+            // Пробуем прямой путь
             router.push(`/admin/media/${file.id}/edit`).catch(() => {
-              // Если и прямой путь не работает, используем window.location
+              // Если не работает, используем window.location
               window.location.href = `/admin/media/${file.id}/edit`
             })
           })
         } else {
           // Роут не найден, используем прямой путь
-          console.warn('[Media] Роут admin.media.edit не найден, используем прямой путь')
-          router.push(`/admin/media/${file.id}/edit`).catch(() => {
+          console.warn('[Media] Роут admin.media.edit не найден в router.getRoutes(), используем прямой путь')
+          // Пробуем прямой путь сразу
+          router.push(`/admin/media/${file.id}/edit`).catch(err => {
+            console.error('[Media] Ошибка при навигации по прямому пути:', err)
+            // Последний fallback - window.location
             window.location.href = `/admin/media/${file.id}/edit`
           })
         }
       } catch (error) {
-        console.error('[Media] Ошибка при навигации к роуту редактирования:', error)
-        // Fallback: используем прямой путь или window.location
-        try {
-          router.push(`/admin/media/${file.id}/edit`).catch(() => {
-            window.location.href = `/admin/media/${file.id}/edit`
-          })
-        } catch (e) {
-          window.location.href = `/admin/media/${file.id}/edit`
-        }
+        console.error('[Media] Критическая ошибка при навигации:', error)
+        // Fallback: используем window.location напрямую
+        window.location.href = `/admin/media/${file.id}/edit`
       }
     }
 
