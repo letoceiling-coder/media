@@ -158,17 +158,22 @@ class InstallCommand extends Command
             }
         }
 
-        $this->line('4. Добавьте роут для редактирования изображений в ваш Vue Router:');
-        $this->line('   <fg=cyan>{');
-        $this->line('     path: \'media/:id/edit\',');
-        $this->line('     name: \'admin.media.edit\',');
-        $this->line('     component: () => import(\'@/vendor/media/components/EditImage.vue\'),');
-        $this->line('   }</>');
+        $this->line('4. ⚠️  ВАЖНО: Добавьте роут для редактирования изображений в ваш Vue Router.');
+        $this->line('   Откройте файл с роутами админки (например, resources/js/router/admin.js)');
+        $this->line('   и добавьте следующий роут внутри children роута /admin:');
         $this->newLine();
+        $this->line('   <fg=cyan>{');
+        $this->line('       path: \'media/:id/edit\',');
+        $this->line('       name: \'admin.media.edit\',');
+        $this->line('       component: () => import(\'@/vendor/media/components/EditImage.vue\'),');
+        $this->line('       meta: { title: \'Редактировать изображение\' },');
+        $this->line('   },</>');
+        $this->newLine();
+        $this->warn('   Без этого роута функция редактирования фото не будет работать!');
 
+        $this->newLine();
         $this->line('5. Пересоберите фронтенд:');
         $this->line('   <fg=cyan>npm run build</>');
         $this->newLine();
     }
 }
-
