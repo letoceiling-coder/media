@@ -4,6 +4,7 @@ namespace LetoceilingCoder\Media;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use LetoceilingCoder\Media\Console\InstallCommand;
 
 class MediaServiceProvider extends ServiceProvider
 {
@@ -64,6 +65,13 @@ class MediaServiceProvider extends ServiceProvider
 
         // Регистрация роутов
         $this->mapApiRoutes();
+
+        // Регистрация команд
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                InstallCommand::class,
+            ]);
+        }
     }
 
     /**
