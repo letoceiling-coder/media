@@ -95,7 +95,27 @@ php artisan vendor:publish --tag=media-components
 - `resources/js/vendor/media/utils/api.js` - утилиты для API запросов
 - `resources/js/vendor/media/composables/useAuthToken.js` - composable для авторизации
 
-**Установка зависимостей для Vue компонентов:**
+### 5. Публикация CSS стилей (обязательно для Vue компонентов)
+
+**ВАЖНО:** Для корректного визуального отображения компонента необходимо опубликовать CSS стили:
+
+```bash
+php artisan vendor:publish --tag=media-styles
+```
+
+Затем подключите стили в вашем главном CSS файле (`resources/css/app.css`):
+
+```css
+@import '../css/vendor/media.css';
+```
+
+Или в `app.js`:
+
+```javascript
+import '../css/vendor/media.css'
+```
+
+### 6. Установка зависимостей для Vue компонентов
 
 ```bash
 npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3
@@ -103,11 +123,13 @@ npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.2
 
 Подробнее о использовании Vue компонентов см. [VUE_COMPONENTS.md](VUE_COMPONENTS.md)
 
-### 5. Публикация изображений (иконки папок, системные изображения) (опционально)
+### 7. Публикация изображений (иконки папок, системные изображения) (опционально)
 
 ```bash
-php artisan vendor:publish --provider="LetoceilingCoder\Media\MediaServiceProvider" --tag="media-assets"
+php artisan vendor:publish --tag=media-assets
 ```
+
+Это опубликует иконки папок в `public/img/system/media/` для использования в компоненте.
 
 ## Автоматические настройки
 

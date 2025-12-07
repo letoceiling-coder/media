@@ -48,6 +48,11 @@ class MediaServiceProvider extends ServiceProvider
             ], 'media-assets');
         }
 
+        // Публикация CSS стилей для компонента
+        $this->publishes([
+            __DIR__ . '/../resources/css/media.css' => resource_path('css/vendor/media.css'),
+        ], 'media-styles');
+
         // Загрузка миграций
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 

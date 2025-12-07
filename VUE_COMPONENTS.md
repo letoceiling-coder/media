@@ -29,6 +29,26 @@ php artisan vendor:publish --tag=media-components
 - `resources/js/vendor/media/utils/api.js` - утилиты для API запросов
 - `resources/js/vendor/media/composables/useAuthToken.js` - composable для авторизации
 
+## Публикация CSS стилей
+
+**ВАЖНО:** Для корректного отображения компонента необходимо опубликовать CSS стили:
+
+```bash
+php artisan vendor:publish --tag=media-styles
+```
+
+Затем подключите стили в вашем главном CSS файле (например, `resources/css/app.css`):
+
+```css
+@import '../css/vendor/media.css';
+```
+
+Или в вашем `app.js`:
+
+```javascript
+import '../css/vendor/media.css'
+```
+
 ## Использование компонента
 
 ### Базовое использование
@@ -40,6 +60,8 @@ php artisan vendor:publish --tag=media-components
 
 <script setup>
 import Media from '@/vendor/media/components/Media.vue'
+// Импортируйте стили, если не подключили глобально
+import '@/css/vendor/media.css'
 </script>
 ```
 
@@ -113,7 +135,31 @@ const API_BASE = '/api/v1'; // Измените на свой URL
 
 ## Стилизация
 
-Компонент использует Tailwind CSS классы. Убедитесь, что Tailwind CSS настроен в вашем проекте.
+Компонент использует Tailwind CSS классы и CSS переменные. Для корректного отображения необходимо:
+
+1. **Опубликовать CSS стили:**
+   ```bash
+   php artisan vendor:publish --tag=media-styles
+   ```
+
+2. **Подключить стили** в ваш проект (в `app.css` или `app.js`):
+   ```css
+   @import '../css/vendor/media.css';
+   ```
+
+3. **Убедиться, что Tailwind CSS настроен** в вашем проекте.
+
+### Кастомизация цветов
+
+Вы можете переопределить CSS переменные в своем `app.css`:
+
+```css
+:root {
+    --accent: 210 40% 96.1%; /* Ваш цвет акцента */
+    --background: 0 0% 100%; /* Ваш цвет фона */
+    /* ... другие переменные */
+}
+```
 
 Основные классы для кастомизации:
 - `bg-accent` - основной цвет акцента

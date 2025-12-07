@@ -1510,7 +1510,15 @@ export default {
     // Получить дефолтную иконку папки
     const getDefaultFolderIcon = () => {
       // Используем динамический путь, чтобы избежать проблем с Vite импортом
-      return `${window.location.origin}/system/folder.png`
+      // Пробуем разные пути для совместимости
+      const paths = [
+        '/img/system/media/folder.png',
+        '/img/system/folder.png',
+        '/system/folder.png',
+        '/system/media/folder.png'
+      ]
+      // Возвращаем первый путь, остальные будут обработаны через @error
+      return `${window.location.origin}${paths[0]}`
     }
 
     // Получить путь к иконке папки
@@ -1519,8 +1527,14 @@ export default {
         // Если нет src, возвращаем дефолтную иконку
         return getDefaultFolderIcon()
       }
-      // Формируем путь по полю src: /system/{src}.png
-      return `${window.location.origin}/system/${folder.src}.png`
+      // Формируем путь по полю src, пробуем разные пути для совместимости
+      const paths = [
+        `/img/system/media/${folder.src}.png`,
+        `/img/system/${folder.src}.png`,
+        `/system/${folder.src}.png`,
+        `/system/media/${folder.src}.png`
+      ]
+      return `${window.location.origin}${paths[0]}`
     }
 
     // Обработчик ошибки загрузки изображения папки (fallback на эмодзи)
@@ -1936,12 +1950,15 @@ export default {
     }
 
     // Редактировать файл (только для фото)
+    // Раскомментируйте и настройте роут, если нужна страница редактирования
     const handleEditFile = (file) => {
       if (file.type !== 'photo') {
         return
       }
-      // Навигация на отдельную страницу редактирования
-      router.push({ name: 'admin.media.edit', params: { id: file.id } })
+      // Раскомментируйте, если у вас есть страница редактирования
+      // router.push({ name: 'admin.media.edit', params: { id: file.id } })
+      console.log('Редактирование файла:', file.id)
+      // Можно открыть модальное окно или другую логику
     }
 
 
