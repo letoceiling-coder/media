@@ -46,7 +46,7 @@ php artisan vendor:publish --tag=media-styles
 Добавьте в `resources/css/app.css`:
 
 ```css
-@import '../css/vendor/media.css';
+@import './vendor/media.css';
 ```
 
 Или в `resources/js/app.js`:

@@ -145,7 +145,7 @@ const API_BASE = '/api/v1'; // Измените на свой URL
 
 2. **Подключить стили** в ваш проект (в `app.css` или `app.js`):
    ```css
-   @import '../css/vendor/media.css';
+   @import './vendor/media.css';
    ```
 
 3. **Убедиться, что Tailwind CSS настроен** в вашем проекте.
