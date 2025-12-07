@@ -31,12 +31,26 @@
 
 ## Быстрая установка
 
+### Минимальная установка (только API)
+
 ```bash
 composer require letoceiling-coder/media
 php artisan migrate
 ```
 
 **Готово!** Пакет работает автоматически. Подробнее в [QUICK_START.md](QUICK_START.md)
+
+### Полная установка (с Vue компонентами)
+
+См. подробную инструкцию: [INSTALLATION_STEPS.md](INSTALLATION_STEPS.md)
+
+**Кратко:**
+1. `composer require letoceiling-coder/media`
+2. `php artisan migrate`
+3. `php artisan vendor:publish --tag=media-components`
+4. `php artisan vendor:publish --tag=media-styles`
+5. Подключите `@import '../css/vendor/media.css'` в `app.css`
+6. `npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3`
 
 ## Установка
 
