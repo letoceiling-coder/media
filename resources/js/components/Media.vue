@@ -567,17 +567,15 @@
                   >
                     <span class="text-sm">⬇</span>
                   </button>
-                  <!-- Редактировать (только для фото) - можно раскомментировать, если есть страница редактирования -->
-                  <!--
+                  <!-- Редактировать (только для фото) - открывает файл для просмотра, если нет роута редактирования -->
                   <button
                     v-if="file.type === 'photo'"
                     @click.stop="handleEditFile(file)"
                     class="flex-1 h-9 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
-                    title="Редактировать"
+                    title="Редактировать/Просмотр"
                   >
                     <span class="text-sm">✏️</span>
                   </button>
-                  -->
                   <!-- Переместить -->
                   <button
                     @click.stop="handleMoveFile(file)"
@@ -1513,14 +1511,8 @@ export default {
     const getDefaultFolderIcon = () => {
       // Используем динамический путь, чтобы избежать проблем с Vite импортом
       // Пробуем разные пути для совместимости
-      const paths = [
-        '/img/system/media/folder.png',
-        '/img/system/folder.png',
-        '/system/folder.png',
-        '/system/media/folder.png'
-      ]
-      // Возвращаем первый путь, остальные будут обработаны через @error
-      return `${window.location.origin}${paths[0]}`
+      // Первый путь - стандартный путь после публикации assets
+      return '/img/system/media/folder.png'
     }
 
     // Получить путь к иконке папки
@@ -1529,14 +1521,9 @@ export default {
         // Если нет src, возвращаем дефолтную иконку
         return getDefaultFolderIcon()
       }
-      // Формируем путь по полю src, пробуем разные пути для совместимости
-      const paths = [
-        `/img/system/media/${folder.src}.png`,
-        `/img/system/${folder.src}.png`,
-        `/system/${folder.src}.png`,
-        `/system/media/${folder.src}.png`
-      ]
-      return `${window.location.origin}${paths[0]}`
+      // Формируем путь по полю src
+      // Стандартный путь после публикации assets: /img/system/media/{src}.png
+      return `/img/system/media/${folder.src}.png`
     }
 
     // Обработчик ошибки загрузки изображения папки (fallback на эмодзи)
@@ -1952,15 +1939,21 @@ export default {
     }
 
     // Редактировать файл (только для фото)
-    // Раскомментируйте и настройте роут, если нужна страница редактирования
     const handleEditFile = (file) => {
       if (file.type !== 'photo') {
         return
       }
-      // Раскомментируйте, если у вас есть страница редактирования
-      // router.push({ name: 'admin.media.edit', params: { id: file.id } })
-      console.log('Редактирование файла:', file.id)
-      // Можно открыть модальное окно или другую логику
+      // Проверяем, существует ли роут для редактирования
+      try {
+        // Пробуем перейти на страницу редактирования, если роут существует
+        if (router.resolve({ name: 'admin.media.edit', params: { id: file.id } })) {
+          router.push({ name: 'admin.media.edit', params: { id: file.id } })
+        }
+      } catch (err) {
+        // Если роут не существует, просто открываем файл для просмотра
+        console.log('Роут редактирования не найден, открываем файл для просмотра:', file.id)
+        openFilePreview(file)
+      }
     }
 
 

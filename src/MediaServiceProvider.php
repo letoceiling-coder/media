@@ -41,10 +41,10 @@ class MediaServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/js/composables/useAuthToken.js' => resource_path('js/vendor/media/composables/useAuthToken.js'),
         ], 'media-components');
 
-        // Публикация изображений
+        // Публикация изображений (иконки папок)
         if (file_exists(__DIR__ . '/../resources/public/img/system')) {
             $this->publishes([
-                __DIR__ . '/../resources/public/img/system' => public_path('img/system'),
+                __DIR__ . '/../resources/public/img/system' => public_path('img/system/media'),
             ], 'media-assets');
         }
 
