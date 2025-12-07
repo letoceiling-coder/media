@@ -84,11 +84,24 @@ php artisan migrate
 php artisan vendor:publish --provider="LetoceilingCoder\Media\MediaServiceProvider" --tag="media-config"
 ```
 
-### 4. Публикация Vue компонента (опционально)
+### 4. Публикация Vue компонентов (опционально, но рекомендуется)
 
 ```bash
-php artisan vendor:publish --provider="LetoceilingCoder\Media\MediaServiceProvider" --tag="media-components"
+php artisan vendor:publish --tag=media-components
 ```
+
+Это опубликует:
+- `resources/js/vendor/media/components/Media.vue` - полнофункциональный медиа-менеджер
+- `resources/js/vendor/media/utils/api.js` - утилиты для API запросов
+- `resources/js/vendor/media/composables/useAuthToken.js` - composable для авторизации
+
+**Установка зависимостей для Vue компонентов:**
+
+```bash
+npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3
+```
+
+Подробнее о использовании Vue компонентов см. [VUE_COMPONENTS.md](VUE_COMPONENTS.md)
 
 ### 5. Публикация изображений (иконки папок, системные изображения) (опционально)
 

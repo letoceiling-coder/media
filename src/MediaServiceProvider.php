@@ -34,12 +34,12 @@ class MediaServiceProvider extends ServiceProvider
             __DIR__ . '/../database/migrations' => database_path('migrations'),
         ], 'media-migrations');
 
-        // Публикация Vue компонентов (если нужно)
-        if (file_exists(__DIR__ . '/../resources/js')) {
-            $this->publishes([
-                __DIR__ . '/../resources/js' => resource_path('js/vendor/media'),
-            ], 'media-components');
-        }
+        // Публикация Vue компонентов
+        $this->publishes([
+            __DIR__ . '/../resources/js/components/Media.vue' => resource_path('js/vendor/media/components/Media.vue'),
+            __DIR__ . '/../resources/js/utils/api.js' => resource_path('js/vendor/media/utils/api.js'),
+            __DIR__ . '/../resources/js/composables/useAuthToken.js' => resource_path('js/vendor/media/composables/useAuthToken.js'),
+        ], 'media-components');
 
         // Публикация изображений
         if (file_exists(__DIR__ . '/../resources/public/img/system')) {
