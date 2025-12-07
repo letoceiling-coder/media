@@ -102,6 +102,21 @@ const API_BASE = '/api/v1'; // Измените на свой URL
 
 Компонент автоматически использует токен из `localStorage.getItem('token')`. Если нужно изменить источник токена, отредактируйте `resources/js/vendor/media/composables/useAuthToken.js`.
 
+### Настройка роута для редактирования изображений
+
+Для работы функции редактирования изображений необходимо добавить роут в ваш Vue Router. Добавьте в файл роутов (например, `resources/js/router/admin.js` или `resources/js/app.js`):
+
+```javascript
+{
+  path: 'media/:id/edit',
+  name: 'admin.media.edit',
+  component: () => import('@/vendor/media/components/EditImage.vue'),
+  meta: { requiresAuth: true }, // Настройте мета-данные по необходимости
+}
+```
+
+Этот роут должен быть внутри группы роутов админки (например, внутри `children` роута `/admin`).
+
 ## Пропсы компонента
 
 | Проп | Тип | По умолчанию | Описание |

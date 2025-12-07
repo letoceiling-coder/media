@@ -37,7 +37,7 @@ class MediaServiceProvider extends ServiceProvider
         // Публикация Vue компонентов
         $this->publishes([
             __DIR__ . '/../resources/js/components/Media.vue' => resource_path('js/vendor/media/components/Media.vue'),
-            __DIR__ . '/../resources/js/components/ImageEditor.vue' => resource_path('js/vendor/media/components/ImageEditor.vue'),
+            __DIR__ . '/../resources/js/components/EditImage.vue' => resource_path('js/vendor/media/components/EditImage.vue'),
             __DIR__ . '/../resources/js/utils/api.js' => resource_path('js/vendor/media/utils/api.js'),
             __DIR__ . '/../resources/js/composables/useAuthToken.js' => resource_path('js/vendor/media/composables/useAuthToken.js'),
         ], 'media-components');

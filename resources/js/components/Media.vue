@@ -687,14 +687,6 @@
     :slide="lightboxSlide"
   />
 
-  <!-- Image Editor -->
-  <ImageEditor
-    :show="showImageEditor"
-    :file="selectedFileForEdit"
-    @close="showImageEditor = false"
-    @saved="handleImageSaved"
-  />
-
 
   <!-- Move File Modal -->
   <div v-if="showMoveModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
@@ -777,15 +769,13 @@ import { useAuthToken } from '../composables/useAuthToken'
 import FsLightbox from 'fslightbox-vue'
 import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
-import ImageEditor from './ImageEditor.vue'
 
 const API_BASE = '/api/v1'
 
 export default {
   name: 'Media',
   components: {
-    FsLightbox,
-    ImageEditor
+    FsLightbox
   },
   props: {
     selectionMode: {
@@ -827,8 +817,6 @@ export default {
     const lightboxToggler = ref(false)
     const lightboxSources = ref([])
     const lightboxSlide = ref(1)
-    const showImageEditor = ref(false)
-    const selectedFileForEdit = ref(null)
     const showMoveModal = ref(false)
     const selectedFileForMove = ref(null)
     const selectedMoveFolderId = ref(null)
@@ -1992,28 +1980,8 @@ export default {
       if (file.type !== 'photo') {
         return
       }
-      // Открываем модальное окно редактора изображений
-      selectedFileForEdit.value = file
-      showImageEditor.value = true
-    }
-
-    // Обработка сохранения отредактированного изображения
-    const handleImageSaved = async (savedFile) => {
-      console.log('[Media] Image saved:', savedFile)
-      // Обновляем список файлов
-      if (selectedFolder.value) {
-        await fetchMediaFiles(selectedFolder.value.id)
-        await fetchFolders()
-      } else {
-        await fetchFolders()
-      }
-      // Показываем уведомление
-      Swal.fire({
-        icon: 'success',
-        title: 'Изображение сохранено',
-        showConfirmButton: false,
-        timer: 2000
-      })
+      // Навигация на отдельную страницу редактирования
+      router.push({ name: 'admin.media.edit', params: { id: file.id } })
     }
 
 
@@ -2607,9 +2575,6 @@ export default {
       openFilePreview,
       handleDownloadFile,
       handleEditFile,
-      showImageEditor,
-      selectedFileForEdit,
-      handleImageSaved,
       handleMoveFile,
       handleRestoreFile,
       showMoveModal,
