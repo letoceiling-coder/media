@@ -1526,16 +1526,53 @@ export default {
       return `/img/system/media/${folder.src}.png`
     }
 
-    // Обработчик ошибки загрузки изображения папки (fallback на эмодзи)
+    // Обработчик ошибки загрузки изображения папки (fallback на альтернативные пути или эмодзи)
     const handleFolderImageError = (event) => {
-      // Если изображение не загрузилось, заменяем на эмодзи
       const img = event.target
+      const src = img.getAttribute('src') || img.src
+      
+      // Если это дефолтная иконка folder.png, пробуем альтернативные пути
+      if (src && src.includes('folder.png')) {
+        const alternativePaths = [
+          '/img/system/folder.png',
+          '/system/folder.png'
+        ]
+        
+        // Пробуем следующий путь
+        const currentPath = src.replace(window.location.origin, '')
+        const currentIndex = alternativePaths.indexOf(currentPath)
+        
+        if (currentIndex >= 0 && currentIndex < alternativePaths.length - 1) {
+          // Пробуем следующий альтернативный путь
+          img.src = window.location.origin + alternativePaths[currentIndex + 1]
+          return
+        }
+      }
+      
+      // Если это иконка папки с src, пробуем другие пути
+      if (src && src.includes('/system/') && !src.includes('folder.png')) {
+        const folderName = src.match(/\/([^\/]+)\.png$/)?.[1]
+        if (folderName) {
+          // Пробуем путь без /media/
+          if (src.includes('/media/')) {
+            const altSrc = src.replace('/system/media/', '/system/')
+            img.src = altSrc
+            return
+          }
+          // Пробуем путь с /media/
+          if (!src.includes('/media/')) {
+            const altSrc = src.replace('/system/', '/system/media/')
+            img.src = altSrc
+            return
+          }
+        }
+      }
+      
+      // Если ничего не помогло, показываем эмодзи
       const parent = img.parentElement
       if (parent && !parent.querySelector('span.folder-fallback')) {
         img.style.display = 'none'
         const emoji = document.createElement('span')
-        // Определяем размер эмодзи в зависимости от класса родителя
-        // Уменьшаем размер эмодзи в 1.5 раза: text-6xl (60px) -> text-4xl (36px), text-lg (18px) -> text-sm (14px)
         if (parent.classList.contains('aspect-square') || img.classList.contains('w-full')) {
           emoji.className = 'text-4xl folder-fallback'
         } else {
