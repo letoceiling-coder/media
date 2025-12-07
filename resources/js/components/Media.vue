@@ -1981,44 +1981,62 @@ export default {
         return
       }
       
-      // Упрощенный подход: сначала пробуем router.push, если не работает - используем window.location
-      // Это гарантирует, что навигация всегда сработает
-      const navigateToEdit = () => {
-        // Пробуем навигацию по имени роута
-        router.push({ name: 'admin.media.edit', params: { id: String(file.id) } })
-          .then(() => {
-            // Успешная навигация
-            if (import.meta.env.DEV) {
-              console.log('[Media] Успешная навигация к роуту редактирования')
+      // Надежная навигация с обработкой всех возможных ошибок
+      const navigateToEdit = async () => {
+        try {
+          // Проверяем, готов ли роутер
+          if (!router || !router.isReady) {
+            console.warn('[Media] Роутер не готов, используем window.location')
+            window.location.href = `/admin/media/${file.id}/edit`
+            return
+          }
+          
+          // Ждем готовности роутера
+          await router.isReady()
+          
+          // Проверяем наличие роута перед навигацией
+          const routes = router.getRoutes()
+          const routeExists = routes.some(route => {
+            if (route.name === 'admin.media.edit') return true
+            if (route.children) {
+              return route.children.some(child => child.name === 'admin.media.edit')
             }
+            return false
           })
-          .catch(err => {
-            // Если навигация по имени не сработала, пробуем прямой путь
-            if (import.meta.env.DEV) {
-              console.warn('[Media] Навигация по имени не сработала, пробуем прямой путь:', err)
+          
+          if (routeExists) {
+            // Пробуем навигацию по имени роута
+            try {
+              await router.push({ name: 'admin.media.edit', params: { id: String(file.id) } })
+              if (import.meta.env.DEV) {
+                console.log('[Media] Успешная навигация к роуту редактирования')
+              }
+              return
+            } catch (err) {
+              console.warn('[Media] Ошибка при навигации по имени:', err)
             }
-            
-            router.push(`/admin/media/${file.id}/edit`)
-              .then(() => {
-                if (import.meta.env.DEV) {
-                  console.log('[Media] Успешная навигация по прямому пути')
-                }
-              })
-              .catch(err2 => {
-                // Если и прямой путь не работает, используем window.location
-                if (import.meta.env.DEV) {
-                  console.warn('[Media] Навигация по прямому пути не сработала, используем window.location:', err2)
-                }
-                window.location.href = `/admin/media/${file.id}/edit`
-              })
-          })
-      }
-      
-      // Проверяем, что роутер доступен
-      if (!router) {
-        console.error('[Media] Роутер недоступен, используем window.location')
-        window.location.href = `/admin/media/${file.id}/edit`
-        return
+          } else {
+            console.warn('[Media] Роут admin.media.edit не найден')
+          }
+          
+          // Пробуем прямой путь
+          try {
+            await router.push(`/admin/media/${file.id}/edit`)
+            if (import.meta.env.DEV) {
+              console.log('[Media] Успешная навигация по прямому пути')
+            }
+            return
+          } catch (err) {
+            console.warn('[Media] Ошибка при навигации по прямому пути:', err)
+          }
+          
+          // Последний fallback - window.location
+          window.location.href = `/admin/media/${file.id}/edit`
+        } catch (error) {
+          console.error('[Media] Критическая ошибка при навигации:', error)
+          // Используем window.location как последнюю надежду
+          window.location.href = `/admin/media/${file.id}/edit`
+        }
       }
       
       // Выполняем навигацию
