@@ -84,6 +84,11 @@ class InstallCommand extends Command
         // Проверка подключения CSS
         $this->checkCssImport();
 
+        // Проверка роута
+        if (!$this->option('no-components')) {
+            $this->checkRoute();
+        }
+
         // Проверка миграций
         $this->checkMigrations();
 
@@ -117,6 +122,50 @@ class InstallCommand extends Command
             $this->newLine();
         } else {
             $this->info('✅ CSS стили подключены');
+        }
+    }
+
+    /**
+     * Проверить наличие роута для редактирования
+     */
+    protected function checkRoute(): void
+    {
+        $this->info('🔍 Проверка роутов...');
+        
+        // Ищем файлы роутов
+        $routerFiles = [
+            resource_path('js/router/admin.js'),
+            resource_path('js/router/index.js'),
+            resource_path('js/router.js'),
+            resource_path('js/routes/admin.js'),
+            resource_path('js/routes.js'),
+            resource_path('js/app.js'),
+        ];
+
+        $routeFound = false;
+        $checkedFile = null;
+
+        foreach ($routerFiles as $file) {
+            if (File::exists($file)) {
+                $content = File::get($file);
+                
+                // Проверяем наличие роута
+                if (str_contains($content, 'admin.media.edit') || 
+                    (str_contains($content, 'media/:id/edit') && str_contains($content, 'EditImage.vue'))) {
+                    $routeFound = true;
+                    $checkedFile = $file;
+                    break;
+                }
+            }
+        }
+
+        if ($routeFound) {
+            $this->info('✅ Роут для редактирования изображений найден');
+        } else {
+            $this->newLine();
+            $this->error('❌ Роут для редактирования изображений НЕ найден!');
+            $this->warn('   Функция редактирования фото не будет работать без этого роута!');
+            $this->newLine();
         }
     }
 
@@ -158,21 +207,47 @@ class InstallCommand extends Command
             }
         }
 
-        $this->line('4. ⚠️  ВАЖНО: Добавьте роут для редактирования изображений в ваш Vue Router.');
-        $this->line('   Откройте файл с роутами админки (например, resources/js/router/admin.js)');
-        $this->line('   и добавьте следующий роут внутри children роута /admin:');
-        $this->newLine();
-        $this->line('   <fg=cyan>{');
-        $this->line('       path: \'media/:id/edit\',');
-        $this->line('       name: \'admin.media.edit\',');
-        $this->line('       component: () => import(\'@/vendor/media/components/EditImage.vue\'),');
-        $this->line('       meta: { title: \'Редактировать изображение\' },');
-        $this->line('   },</>');
-        $this->newLine();
-        $this->warn('   Без этого роута функция редактирования фото не будет работать!');
+        // Проверяем роут еще раз для вывода
+        $routerFiles = [
+            resource_path('js/router/admin.js'),
+            resource_path('js/router/index.js'),
+            resource_path('js/router.js'),
+            resource_path('js/routes/admin.js'),
+            resource_path('js/routes.js'),
+            resource_path('js/app.js'),
+        ];
 
-        $this->newLine();
-        $this->line('5. Пересоберите фронтенд:');
+        $routeFound = false;
+        foreach ($routerFiles as $file) {
+            if (File::exists($file)) {
+                $content = File::get($file);
+                if (str_contains($content, 'admin.media.edit') || 
+                    (str_contains($content, 'media/:id/edit') && str_contains($content, 'EditImage.vue'))) {
+                    $routeFound = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$routeFound && !$this->option('no-components')) {
+            $this->newLine();
+            $this->error('⚠️  ⚠️  ⚠️  ВАЖНО: Добавьте роут для редактирования изображений! ⚠️  ⚠️  ⚠️');
+            $this->newLine();
+            $this->line('   Откройте файл с роутами админки (например, resources/js/router/admin.js)');
+            $this->line('   и добавьте следующий роут внутри children роута /admin:');
+            $this->newLine();
+            $this->line('   <fg=cyan>{');
+            $this->line('       path: \'media/:id/edit\',');
+            $this->line('       name: \'admin.media.edit\',');
+            $this->line('       component: () => import(\'@/vendor/media/components/EditImage.vue\'),');
+            $this->line('       meta: { title: \'Редактировать изображение\' },');
+            $this->line('   },</>');
+            $this->newLine();
+            $this->error('   БЕЗ ЭТОГО РОУТА ФУНКЦИЯ РЕДАКТИРОВАНИЯ ФОТО НЕ БУДЕТ РАБОТАТЬ!');
+            $this->newLine();
+        }
+
+        $this->line('4. Пересоберите фронтенд:');
         $this->line('   <fg=cyan>npm run build</>');
         $this->newLine();
     }
