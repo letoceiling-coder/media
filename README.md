@@ -31,13 +31,28 @@
 
 ### 1. Установка через Composer
 
-Добавьте репозиторий в `composer.json` вашего проекта:
-
-Или установите напрямую:
+Установите пакет напрямую:
 
 ```bash
-composer require letoceiling-coder/media:^1.0
+composer require letoceiling-coder/media
 ```
+
+Команда автоматически установит последнюю стабильную версию пакета.
+
+> **Примечание:** Если пакет не опубликован в Packagist, добавьте репозиторий в `composer.json`:
+> 
+> ```json
+> {
+>     "repositories": [
+>         {
+>             "type": "vcs",
+>             "url": "https://github.com/letoceiling-coder/media.git"
+>         }
+>     ]
+> }
+> ```
+> 
+> Затем установите пакет: `composer require letoceiling-coder/media`
 
 ### 2. Публикация конфигурации и миграций
 
