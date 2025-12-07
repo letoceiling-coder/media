@@ -27,14 +27,18 @@ npm run build
 
 После установки не забудьте:
 
-1. **Добавить роут для редактирования изображений** в ваш Vue Router:
+1. **⚠️ ВАЖНО: Добавить роут для редактирования изображений** в ваш Vue Router (файл `resources/js/router/admin.js` или аналогичный):
+
 ```javascript
 {
   path: 'media/:id/edit',
   name: 'admin.media.edit',
   component: () => import('@/vendor/media/components/EditImage.vue'),
+  meta: { title: 'Редактировать изображение' },
 }
 ```
+
+**Без этого роута функция редактирования фото не будет работать!**
 
 2. **Подключить CSS стили** (если не подключены автоматически) в `resources/css/app.css`:
 ```css

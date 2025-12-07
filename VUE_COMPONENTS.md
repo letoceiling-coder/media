@@ -104,18 +104,42 @@ const API_BASE = '/api/v1'; // Измените на свой URL
 
 ### Настройка роута для редактирования изображений
 
-Для работы функции редактирования изображений необходимо добавить роут в ваш Vue Router. Добавьте в файл роутов (например, `resources/js/router/admin.js` или `resources/js/app.js`):
+⚠️ **ВАЖНО:** Для работы функции редактирования изображений необходимо добавить роут в ваш Vue Router!
+
+Добавьте в файл роутов админки (например, `resources/js/router/admin.js`):
 
 ```javascript
 {
   path: 'media/:id/edit',
   name: 'admin.media.edit',
   component: () => import('@/vendor/media/components/EditImage.vue'),
-  meta: { requiresAuth: true }, // Настройте мета-данные по необходимости
+  meta: { title: 'Редактировать изображение' }, // Настройте мета-данные по необходимости
 }
 ```
 
-Этот роут должен быть внутри группы роутов админки (например, внутри `children` роута `/admin`).
+**Пример полной конфигурации роутов:**
+
+```javascript
+{
+  path: '/admin',
+  component: AdminLayout,
+  children: [
+    {
+      path: 'media',
+      name: 'admin.media',
+      component: () => import('../pages/admin/MediaPage.vue'),
+    },
+    {
+      path: 'media/:id/edit',  // ← Добавьте этот роут
+      name: 'admin.media.edit',
+      component: () => import('@/vendor/media/components/EditImage.vue'),
+      meta: { title: 'Редактировать изображение' },
+    },
+  ],
+}
+```
+
+**Без этого роута функция редактирования фото не будет работать!** При клике на кнопку редактирования будет возникать ошибка `No match for route "admin.media.edit"`.
 
 ## Пропсы компонента
 
