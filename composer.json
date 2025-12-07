@@ -31,7 +31,6 @@
         }
     },
     "prefer-stable": true,
-    "version": "1.2.0",
     "homepage": "https://github.com/letoceiling-coder/media",
     "support": {
         "issues": "https://github.com/letoceiling-coder/media/issues",
