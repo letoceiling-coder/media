@@ -53,7 +53,7 @@ php artisan migrate
 2. `php artisan migrate`
 3. `php artisan vendor:publish --tag=media-components`
 4. `php artisan vendor:publish --tag=media-styles`
-5. Подключите `@import '../css/vendor/media.css'` в `app.css`
+5. Подключите `@import './vendor/media.css';` в `resources/css/app.css`
 6. `npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3`
 
 ## Установка
