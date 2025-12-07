@@ -1,5 +1,8 @@
 # Laravel Media Package
 
+**Версия:** 1.0.0  
+**Лицензия:** MIT
+
 Полнофункциональный пакет для управления медиа-файлами в Laravel приложениях. Включает загрузку файлов, управление папками, корзину, фильтрацию, поиск и многое другое.
 
 ## Возможности
@@ -30,24 +33,10 @@
 
 Добавьте репозиторий в `composer.json` вашего проекта:
 
-```json
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/letoceiling-coder/media.git"
-        }
-    ],
-    "require": {
-        "letoceiling-coder/media": "dev-main"
-    }
-}
-```
-
 Или установите напрямую:
 
 ```bash
-composer require letoceiling-coder/media dev-main
+composer require letoceiling-coder/media:^1.0
 ```
 
 ### 2. Публикация конфигурации и миграций

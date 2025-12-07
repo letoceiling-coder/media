@@ -1,34 +1,12 @@
 # Инструкция по установке пакета Media
 
-## Шаг 1: Клонирование репозитория
+## Шаг 1: Установка через Composer
 
 ```bash
-git clone https://github.com/letoceiling-coder/media.git
+composer require letoceiling-coder/media:^1.0
 ```
 
-Или добавьте как зависимость в composer.json:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/letoceiling-coder/media.git"
-        }
-    ],
-    "require": {
-        "letoceiling-coder/media": "dev-main"
-    }
-}
-```
-
-## Шаг 2: Установка через Composer
-
-```bash
-composer require letoceiling-coder/media dev-main
-```
-
-## Шаг 3: Публикация файлов
+## Шаг 2: Публикация файлов
 
 ### Конфигурация
 
@@ -54,7 +32,7 @@ php artisan vendor:publish --provider="LetoceilingCoder\Media\MediaServiceProvid
 php artisan vendor:publish --provider="LetoceilingCoder\Media\MediaServiceProvider" --tag="media-assets"
 ```
 
-## Шаг 4: Запуск миграций
+## Шаг 3: Запуск миграций
 
 ```bash
 php artisan migrate
@@ -66,7 +44,7 @@ php artisan migrate
 - Документы
 - Корзина
 
-## Шаг 5: Настройка конфигурации
+## Шаг 4: Настройка конфигурации
 
 Отредактируйте `config/media.php` или добавьте переменные в `.env`:
 
@@ -79,14 +57,14 @@ MEDIA_PER_PAGE_MAX=100
 MEDIA_USER_SCOPING=true
 ```
 
-## Шаг 6: Создание директории для загрузки файлов
+## Шаг 5: Создание директории для загрузки файлов
 
 ```bash
 mkdir -p public/upload
 chmod 755 public/upload
 ```
 
-## Шаг 7: Настройка авторизации (рекомендуется)
+## Шаг 6: Настройка авторизации (рекомендуется)
 
 Добавьте middleware в `MediaServiceProvider` или создайте свой сервис-провайдер:
 
