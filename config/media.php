@@ -80,4 +80,40 @@ return [
         // Имя папки корзины
         'folder_name' => env('MEDIA_TRASH_FOLDER_NAME', 'Корзина'),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Middleware Settings
+    |--------------------------------------------------------------------------
+    |
+    | Настройки middleware для API роутов
+    |
+    */
+
+    'middleware' => [
+        // Middleware для защиты API роутов
+        // Автоматически определяется, если не указано
+        // Возможные значения: 'auth:sanctum', 'auth:api', null, или массив middleware
+        'api' => env('MEDIA_MIDDLEWARE_API', null),
+
+        // Дополнительные middleware (будут добавлены к основным)
+        'additional' => env('MEDIA_MIDDLEWARE_ADDITIONAL', '') ? explode(',', env('MEDIA_MIDDLEWARE_ADDITIONAL', '')) : [],
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Auto Setup
+    |--------------------------------------------------------------------------
+    |
+    | Автоматическая настройка при установке пакета
+    |
+    */
+
+    'auto_setup' => [
+        // Автоматически создавать директорию для загрузки, если она не существует
+        'create_upload_directory' => env('MEDIA_AUTO_CREATE_UPLOAD_DIR', true),
+
+        // Автоматически публиковать конфигурацию при первой установке
+        'auto_publish_config' => env('MEDIA_AUTO_PUBLISH_CONFIG', false),
+    ],
 ];

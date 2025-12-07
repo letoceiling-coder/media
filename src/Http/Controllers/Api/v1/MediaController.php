@@ -156,6 +156,10 @@ class MediaController extends Controller
             $fullPath = public_path($uploadPath);
             if (!file_exists($fullPath)) {
                 mkdir($fullPath, 0755, true);
+                // Создаем .gitkeep для сохранения структуры в git
+                if (!file_exists($fullPath . '/.gitkeep')) {
+                    touch($fullPath . '/.gitkeep');
+                }
             }
 
             // Сохраняем файл
@@ -350,6 +354,10 @@ class MediaController extends Controller
                 $newFullPath = public_path($newUploadPath);
                 if (!file_exists($newFullPath)) {
                     mkdir($newFullPath, 0755, true);
+                    // Создаем .gitkeep для сохранения структуры в git
+                    if (!file_exists($newFullPath . '/.gitkeep')) {
+                        touch($newFullPath . '/.gitkeep');
+                    }
                 }
 
                 // Перемещаем файл

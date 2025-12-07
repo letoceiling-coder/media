@@ -23,6 +23,7 @@ class MediaServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         // Публикация конфигурации
         $this->publishes([
             __DIR__ . '/../config/media.php' => config_path('media.php'),
@@ -50,6 +51,11 @@ class MediaServiceProvider extends ServiceProvider
         // Загрузка миграций
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
+        // Автоматическое создание директории для загрузки
+        if ($this->shouldCreateUploadDirectory()) {
+            $this->createUploadDirectoryIfNotExists();
+        }
+
         // Регистрация роутов
         $this->mapApiRoutes();
     }
@@ -59,8 +65,10 @@ class MediaServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes(): void
     {
+        $middleware = $this->getMiddleware();
+        
         Route::prefix('api/v1')
-            ->middleware('api')
+            ->middleware(array_filter(array_merge(['api'], $middleware)))
             ->group(function () {
                 // Folders
                 Route::get('folders/tree/all', [
@@ -93,5 +101,70 @@ class MediaServiceProvider extends ServiceProvider
                 
                 Route::apiResource('media', \LetoceilingCoder\Media\Http\Controllers\Api\v1\MediaController::class);
             });
+    }
+
+    /**
+     * Получить middleware для API роутов
+     * Автоматически определяет наличие auth:sanctum или auth:api
+     */
+    protected function getMiddleware(): array
+    {
+        $configMiddleware = config('media.middleware.api');
+        $additionalMiddleware = config('media.middleware.additional', []);
+
+        // Если middleware указан в конфигурации, используем его
+        if ($configMiddleware !== null) {
+            if (is_string($configMiddleware)) {
+                return array_merge([$configMiddleware], $additionalMiddleware);
+            }
+            if (is_array($configMiddleware)) {
+                return array_merge($configMiddleware, $additionalMiddleware);
+            }
+        }
+
+        // Автоматическое определение middleware
+        $middleware = [];
+
+        // Проверяем наличие auth:sanctum
+        if (class_exists(\Laravel\Sanctum\Sanctum::class)) {
+            $middleware[] = 'auth:sanctum';
+        }
+        // Иначе проверяем наличие auth:api
+        elseif (config('auth.guards.api')) {
+            $middleware[] = 'auth:api';
+        }
+
+        return array_merge($middleware, $additionalMiddleware);
+    }
+
+
+    /**
+     * Проверить, нужно ли создавать директорию для загрузки
+     */
+    protected function shouldCreateUploadDirectory(): bool
+    {
+        return config('media.auto_setup.create_upload_directory', true);
+    }
+
+    /**
+     * Создать директорию для загрузки, если её нет
+     */
+    protected function createUploadDirectoryIfNotExists(): void
+    {
+        $uploadPath = config('media.upload.path', 'upload');
+        $fullPath = public_path($uploadPath);
+
+        if (!file_exists($fullPath)) {
+            if (!is_dir(public_path())) {
+                // Если public_path не существует, пропускаем
+                return;
+            }
+            mkdir($fullPath, 0755, true);
+            
+            // Создаем .gitkeep файл для сохранения пустой директории в git
+            if (!file_exists($fullPath . '/.gitkeep')) {
+                touch($fullPath . '/.gitkeep');
+            }
+        }
     }
 }

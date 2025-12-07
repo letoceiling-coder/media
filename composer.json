@@ -2,7 +2,7 @@
     "name": "letoceiling-coder/media",
     "description": "Laravel Media Package - Полный функционал для работы с медиа-файлами, папками, загрузкой, управлением",
     "type": "library",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "keywords": ["laravel", "media", "file-manager", "upload", "folder"],
     "license": "MIT",
     "authors": [
