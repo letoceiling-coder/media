@@ -120,7 +120,7 @@ php artisan media:install --no-components --no-styles --no-assets
 > 
 > Затем установите пакет: `composer require letoceiling-coder/media`
 
-### 2. Запуск миграций
+### 3. Запуск миграций
 
 ```bash
 php artisan migrate
@@ -131,7 +131,26 @@ php artisan migrate
 - ✅ Создаст директорию `public/upload` при первой загрузке файла
 - ✅ Настроит все необходимые роуты
 
-### 3. Публикация конфигурации (опционально)
+> **Примечание:** Если пакет не опубликован в Packagist, добавьте репозиторий в `composer.json`:
+> 
+> ```json
+> {
+>     "repositories": [
+>         {
+>             "type": "vcs",
+>             "url": "https://github.com/letoceiling-coder/media.git"
+>         }
+>     ]
+> }
+> ```
+> 
+> Затем установите пакет: `composer require letoceiling-coder/media`
+
+### Ручная публикация файлов (если не использовали `media:install`)
+
+Если вы не использовали команду `php artisan media:install`, выполните следующие шаги вручную:
+
+#### Публикация конфигурации (опционально)
 
 Публикация конфигурации нужна только для кастомизации. Пакет работает с настройками по умолчанию:
 
@@ -139,7 +158,7 @@ php artisan migrate
 php artisan vendor:publish --provider="LetoceilingCoder\Media\MediaServiceProvider" --tag="media-config"
 ```
 
-### 4. Публикация Vue компонентов (опционально, но рекомендуется)
+#### Публикация Vue компонентов
 
 ```bash
 php artisan vendor:publish --tag=media-components
