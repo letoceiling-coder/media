@@ -26,7 +26,7 @@ php artisan vendor:publish --tag=media-components
 
 Компоненты будут опубликованы в:
 - `resources/js/vendor/media/components/Media.vue` - основной компонент
-- `resources/js/vendor/media/components/ImageEditor.vue` - компонент редактора изображений с функцией обрезки
+- `resources/js/vendor/media/components/EditImage.vue` - страница редактирования изображений с функцией обрезки
 - `resources/js/vendor/media/utils/api.js` - утилиты для API запросов
 - `resources/js/vendor/media/composables/useAuthToken.js` - composable для авторизации
 
