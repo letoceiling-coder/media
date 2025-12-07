@@ -1,0 +1,40 @@
+{
+    "name": "letoceiling-coder/media",
+    "description": "Laravel Media Package - Полный функционал для работы с медиа-файлами, папками, загрузкой, управлением",
+    "type": "library",
+    "keywords": ["laravel", "media", "file-manager", "upload", "folder"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "letoceiling-coder",
+            "email": "support@example.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^10.0|^11.0|^12.0",
+        "laravel/sanctum": "^3.0|^4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LetoceilingCoder\\Media\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LetoceilingCoder\\Media\\MediaServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "homepage": "https://github.com/letoceiling-coder/media",
+    "support": {
+        "issues": "https://github.com/letoceiling-coder/media/issues",
+        "source": "https://github.com/letoceiling-coder/media"
+    }
+}
