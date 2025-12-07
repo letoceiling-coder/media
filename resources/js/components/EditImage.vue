@@ -480,17 +480,20 @@ export default {
       try {
         // Получаем результат обрезки
         const result = cropperRef.value.getResult()
+        console.log('[EditImage] Результат обрезки:', result)
         
         if (!result || !result.canvas) {
           throw new Error('Не удалось получить результат обрезки')
         }
         
         const { canvas } = result
+        console.log('[EditImage] Canvas размеры:', canvas.width, 'x', canvas.height)
 
         // Изменяем размер если указано
         let finalCanvas = canvas
         if (outputWidth.value && outputHeight.value &&
           (canvas.width !== outputWidth.value || canvas.height !== outputHeight.value)) {
+          console.log('[EditImage] Изменение размера с', canvas.width, 'x', canvas.height, 'на', outputWidth.value, 'x', outputHeight.value)
           const resizedCanvas = document.createElement('canvas')
           resizedCanvas.width = outputWidth.value
           resizedCanvas.height = outputHeight.value
@@ -506,6 +509,7 @@ export default {
               reject(new Error('Не удалось создать blob из canvas'))
               return
             }
+            console.log('[EditImage] Blob создан:', blob.size, 'байт, тип:', blob.type)
             resolve(blob)
           }, outputFormat.value, quality.value / 100)
         })
@@ -518,6 +522,15 @@ export default {
           ? file.value.folder_id.toString() 
           : ''
         formData.append('folder_id', folderId)
+        
+        console.log('[EditImage] Сохранение:', {
+          replaceExisting,
+          fileId: file.value.id,
+          folderId: folderId,
+          originalFolderId: file.value.folder_id,
+          blobSize: blob.size,
+          blobType: blob.type
+        })
 
         let response
         if (replaceExisting) {
@@ -533,6 +546,8 @@ export default {
           throw new Error(errorData.message || 'Ошибка сохранения изображения')
         }
 
+        const savedFile = await response.json()
+        
         Swal.fire({
           title: 'Успешно',
           text: replaceExisting ? 'Изображение обновлено' : 'Новое изображение создано',
@@ -609,4 +624,3 @@ export default {
   background: #f0f0f0;
 }
 </style>
-

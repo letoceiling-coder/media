@@ -5,6 +5,15 @@
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.0.0/),
 и этот проект придерживается [Semantic Versioning](https://semver.org/lang/ru/).
 
+## [1.3.7] - 2025-12-07
+
+### Изменено
+- ✅ Полностью переписан Media.vue на основе оригинала из lagom-figma проекта
+- ✅ Полностью переписан EditImage.vue на основе оригинала из lagom-figma проекта
+- ✅ Исправлены пути импортов для пакета (../utils/api вместо ../../utils/api)
+- ✅ Исправлена навигация handleEditFile на window.location.href для избежания ошибок роутера
+- ✅ Исправлены пути к иконкам папок (/system/ вместо /img/system/media/)
+
 ## [1.3.6] - 2025-12-07
 
 ### Исправлено
