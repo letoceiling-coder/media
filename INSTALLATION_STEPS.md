@@ -58,7 +58,7 @@ import '../css/vendor/media.css'
 ### Шаг 7: Установка зависимостей
 
 ```bash
-npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3
+npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3 vue-advanced-cropper@^2.8.9
 ```
 
 ### Шаг 8: Публикация иконок (опционально)
@@ -126,5 +126,5 @@ php artisan vendor:publish --tag=media-assets
 
 **Решение:** Убедитесь, что все зависимости установлены:
 ```bash
-npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3
+npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3 vue-advanced-cropper@^2.8.9
 ```

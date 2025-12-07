@@ -7,13 +7,13 @@
 Перед использованием Vue компонентов необходимо установить зависимости:
 
 ```bash
-npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3
+npm install vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3 vue-advanced-cropper@^2.8.9
 ```
 
 Или через yarn:
 
 ```bash
-yarn add vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3
+yarn add vue@^3.5.0 vue-router@^4.6.0 fslightbox-vue@^3.0.1 sweetalert2@^11.26.3 vue-advanced-cropper@^2.8.9
 ```
 
 ## Публикация компонентов
@@ -26,6 +26,7 @@ php artisan vendor:publish --tag=media-components
 
 Компоненты будут опубликованы в:
 - `resources/js/vendor/media/components/Media.vue` - основной компонент
+- `resources/js/vendor/media/components/ImageEditor.vue` - компонент редактора изображений с функцией обрезки
 - `resources/js/vendor/media/utils/api.js` - утилиты для API запросов
 - `resources/js/vendor/media/composables/useAuthToken.js` - composable для авторизации
 
