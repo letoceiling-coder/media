@@ -30,15 +30,23 @@ npm run build
 1. **⚠️ ВАЖНО: Добавить роут для редактирования изображений** в ваш Vue Router (файл `resources/js/router/admin.js` или аналогичный):
 
 ```javascript
+// ⚠️ ВАЖНО: Этот роут должен быть ПЕРЕД роутом "media"!
 {
   path: 'media/:id/edit',
   name: 'admin.media.edit',
   component: () => import('@/vendor/media/components/EditImage.vue'),
   meta: { title: 'Редактировать изображение' },
-}
+},
+// Роут "media" должен быть после
+{
+  path: 'media',
+  name: 'admin.media',
+  component: () => import('../pages/admin/MediaPage.vue'),
+  meta: { title: 'Медиа' },
+},
 ```
 
-**Без этого роута функция редактирования фото не будет работать!**
+> **Примечание:** Компонент будет работать даже без этого роута (используется `window.location` fallback), но для лучшего UX рекомендуется добавить роут. Команда `php artisan media:install` автоматически проверит наличие роута и предупредит, если он отсутствует или неправильно расположен.
 
 2. **Подключить CSS стили** (если не подключены автоматически) в `resources/css/app.css`:
 ```css

@@ -353,7 +353,10 @@ class InstallCommand extends Command
 
         if (!$routeFound && !$this->option('no-components')) {
             $this->newLine();
-            $this->error('⚠️  ⚠️  ⚠️  ВАЖНО: Добавьте роут для редактирования изображений! ⚠️  ⚠️  ⚠️');
+            $this->warn('⚠️  Рекомендуется: Добавить роут для редактирования изображений');
+            $this->newLine();
+            $this->line('   Компонент будет работать даже без этого роута (используется fallback),');
+            $this->line('   но для лучшего UX (без перезагрузки страницы) рекомендуется добавить роут.');
             $this->newLine();
             $this->line('   Откройте файл с роутами админки (например, resources/js/router/admin.js)');
             $this->line('   и добавьте следующий роут ВНУТРИ children роута /admin, ПЕРЕД роутом "media":');
@@ -365,8 +368,6 @@ class InstallCommand extends Command
             $this->line('       meta: { title: \'Редактировать изображение\' },');
             $this->line('   },</>');
             $this->line('   <fg=yellow>// Роут должен быть ПЕРЕД роутом "media"!</>');
-            $this->newLine();
-            $this->error('   БЕЗ ЭТОГО РОУТА ФУНКЦИЯ РЕДАКТИРОВАНИЯ ФОТО НЕ БУДЕТ РАБОТАТЬ!');
             $this->newLine();
         }
 
