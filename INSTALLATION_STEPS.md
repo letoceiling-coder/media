@@ -105,7 +105,46 @@ php artisan vendor:publish --tag=media-assets
 
 Это скопирует иконки папок в `public/img/system/media/`.
 
-### Шаг 9: Пересборка фронтенда
+### Шаг 9: Добавление роута для редактирования изображений
+
+⚠️ **ВАЖНО:** Для работы функции редактирования изображений необходимо добавить роут в ваш Vue Router!
+
+Откройте файл роутов админки (например, `resources/js/router/admin.js`) и добавьте роут внутри `children` роута `/admin`:
+
+```javascript
+{
+  path: 'media/:id/edit',
+  name: 'admin.media.edit',
+  component: () => import('@/vendor/media/components/EditImage.vue'),
+  meta: { title: 'Редактировать изображение' },
+}
+```
+
+**Пример:**
+
+```javascript
+{
+  path: '/admin',
+  component: AdminLayout,
+  children: [
+    {
+      path: 'media',
+      name: 'admin.media',
+      component: () => import('../pages/admin/MediaPage.vue'),
+    },
+    {
+      path: 'media/:id/edit',  // ← Добавьте этот роут
+      name: 'admin.media.edit',
+      component: () => import('@/vendor/media/components/EditImage.vue'),
+      meta: { title: 'Редактировать изображение' },
+    },
+  ],
+}
+```
+
+**Без этого роута функция редактирования фото не будет работать!**
+
+### Шаг 10: Пересборка фронтенда
 
 ```bash
 npm run build
@@ -113,7 +152,7 @@ npm run build
 npm run dev
 ```
 
-### Шаг 10: Использование компонента
+### Шаг 11: Использование компонента
 
 Создайте страницу или используйте компонент:
 
