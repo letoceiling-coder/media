@@ -567,7 +567,8 @@
                   >
                     <span class="text-sm">⬇</span>
                   </button>
-                  <!-- Редактировать (только для фото) -->
+                  <!-- Редактировать (только для фото) - можно раскомментировать, если есть страница редактирования -->
+                  <!--
                   <button
                     v-if="file.type === 'photo'"
                     @click.stop="handleEditFile(file)"
@@ -576,6 +577,7 @@
                   >
                     <span class="text-sm">✏️</span>
                   </button>
+                  -->
                   <!-- Переместить -->
                   <button
                     @click.stop="handleMoveFile(file)"
