@@ -1980,8 +1980,41 @@ export default {
       if (file.type !== 'photo') {
         return
       }
-      // Навигация на отдельную страницу редактирования
-      router.push({ name: 'admin.media.edit', params: { id: file.id } })
+      
+      // Проверяем наличие роута по имени, если не найден - используем прямой путь
+      try {
+        // Сначала пытаемся найти роут по имени
+        const routes = router.getRoutes()
+        const editRoute = routes.find(r => r.name === 'admin.media.edit')
+        
+        if (editRoute) {
+          // Роут найден, используем навигацию по имени
+          router.push({ name: 'admin.media.edit', params: { id: file.id } }).catch(err => {
+            // Если ошибка при навигации по имени, используем прямой путь
+            console.warn('[Media] Роут по имени не сработал, используем прямой путь:', err)
+            router.push(`/admin/media/${file.id}/edit`).catch(() => {
+              // Если и прямой путь не работает, используем window.location
+              window.location.href = `/admin/media/${file.id}/edit`
+            })
+          })
+        } else {
+          // Роут не найден, используем прямой путь
+          console.warn('[Media] Роут admin.media.edit не найден, используем прямой путь')
+          router.push(`/admin/media/${file.id}/edit`).catch(() => {
+            window.location.href = `/admin/media/${file.id}/edit`
+          })
+        }
+      } catch (error) {
+        console.error('[Media] Ошибка при навигации к роуту редактирования:', error)
+        // Fallback: используем прямой путь или window.location
+        try {
+          router.push(`/admin/media/${file.id}/edit`).catch(() => {
+            window.location.href = `/admin/media/${file.id}/edit`
+          })
+        } catch (e) {
+          window.location.href = `/admin/media/${file.id}/edit`
+        }
+      }
     }
 
 
