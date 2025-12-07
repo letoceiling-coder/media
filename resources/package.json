@@ -6,7 +6,8 @@
     "vue": "^3.5.0",
     "vue-router": "^4.6.0",
     "fslightbox-vue": "^3.0.1",
-    "sweetalert2": "^11.26.3"
+    "sweetalert2": "^11.26.3",
+    "vue-advanced-cropper": "^2.8.9"
   },
   "peerDependencies": {
     "vue": "^3.5.0",
