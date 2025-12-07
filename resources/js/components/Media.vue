@@ -312,8 +312,6 @@ import FsLightbox from 'fslightbox-vue'
 import Swal from 'sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 
-const API_BASE = '/api/v1'
-
 export default {
   name: 'Media',
   components: {
@@ -378,8 +376,9 @@ export default {
       loading.value = true
       error.value = null
       try {
-        const response = await apiGet(`${API_BASE}/folders/tree/all`)
-        folders.value = response.data || response
+        const response = await apiGet('/folders/tree/all')
+        const data = await response.json()
+        folders.value = data.data || data
       } catch (err) {
         error.value = 'Ошибка загрузки папок'
         console.error('Error loading folders:', err)
@@ -402,12 +401,13 @@ export default {
         if (selectedFolder.value) {
           params.folder_id = selectedFolder.value.id
         }
-        const response = await apiGet(`${API_BASE}/media`, { params })
-        if (response.data) {
-          files.value = response.data
-          pagination.value = response.meta || response.pagination || null
+        const response = await apiGet('/media', params)
+        const data = await response.json()
+        if (data.data) {
+          files.value = data.data
+          pagination.value = data.meta || data.pagination || null
         } else {
-          files.value = response
+          files.value = data
           pagination.value = null
         }
       } catch (err) {
@@ -471,11 +471,10 @@ export default {
         if (selectedFolder.value) {
           formData.append('folder_id', selectedFolder.value.id)
         }
-        await apiPost(`${API_BASE}/media`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
+        const response = await apiPost('/media', formData)
+        if (!response.ok) {
+          throw new Error('Failed to upload files')
+        }
         await loadFiles(pagination.value?.current_page || 1)
         Swal.fire({
           icon: 'success',
@@ -510,7 +509,10 @@ export default {
       })
       if (result.isConfirmed) {
         try {
-          await apiDelete(`${API_BASE}/media/${file.id}`)
+          const response = await apiDelete(`/media/${file.id}`)
+          if (!response.ok) {
+            throw new Error('Failed to delete file')
+          }
           await loadFiles(pagination.value?.current_page || 1)
           Swal.fire({
             icon: 'success',
@@ -543,7 +545,10 @@ export default {
       })
       if (result.isConfirmed) {
         try {
-          await apiDelete(`${API_BASE}/folders/${folder.id}`)
+          const response = await apiDelete(`/folders/${folder.id}`)
+          if (!response.ok) {
+            throw new Error('Failed to delete folder')
+          }
           await loadFolders()
           Swal.fire({
             icon: 'success',
@@ -572,9 +577,12 @@ export default {
       if (!newFolderName.value.trim()) return
       loading.value = true
       try {
-        await apiPost(`${API_BASE}/folders`, {
+        const response = await apiPost('/folders', {
           name: newFolderName.value.trim()
         })
+        if (!response.ok) {
+          throw new Error('Failed to create folder')
+        }
         await loadFolders()
         showCreateFolderModal.value = false
         newFolderName.value = ''
@@ -610,9 +618,12 @@ export default {
     const handleConfirmMove = async () => {
       if (!fileToMove.value || !moveTargetFolder.value) return
       try {
-        await apiPut(`${API_BASE}/media/${fileToMove.value.id}`, {
+        const response = await apiPut(`/media/${fileToMove.value.id}`, {
           folder_id: moveTargetFolder.value.id
         })
+        if (!response.ok) {
+          throw new Error('Failed to move file')
+        }
         await loadFiles(pagination.value?.current_page || 1)
         showMoveModal.value = false
         fileToMove.value = null
@@ -739,8 +750,9 @@ export default {
     // Загрузить все папки для выбора
     const fetchAllFolders = async () => {
       try {
-        const response = await apiGet(`${API_BASE}/folders/tree/all`)
-        allFolders.value = response.data || response
+        const response = await apiGet('/folders/tree/all')
+        const data = await response.json()
+        allFolders.value = data.data || data
       } catch (err) {
         console.error('Error loading all folders:', err)
       }
